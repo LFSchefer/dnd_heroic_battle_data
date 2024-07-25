@@ -1,7 +1,6 @@
 # Welcome to DnD Heroic Battle Data repository.
 
-This is the data repository to the DnD Heroic Battle application.
-The Database is an Postgresql database.
+## This is the data repository to the DnD Heroic Battle application. The Database is an **Postgresql database**.
 
 Please follow those instruction to setup your database in local.
 ---
