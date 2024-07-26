@@ -9,7 +9,6 @@ DROP TABLE IF EXISTS monster_condition_immunities;
 DROP TABLE IF EXISTS monster_imunities;
 DROP TABLE IF EXISTS monster_resistances;
 DROP TABLE IF EXISTS monster_vulnerabilities;
-DROP TABLE IF EXISTS monster_armors;
 DROP TABLE IF EXISTS monsters;
 DROP TABLE IF EXISTS proficiency_bonus;
 DROP TABLE IF EXISTS proficiencies;
@@ -168,22 +167,14 @@ CREATE TABLE monsters (
 	size_id bigint NOT NULL,
 	sense_id bigint NOT NULL,
 	speed_id bigint NOT NULL,
+	armor_id bigint NOT NULL,
 	CONSTRAINT monter_pkey PRIMARY KEY (id),
 	CONSTRAINT unique_monster UNIQUE (monster_name),
 	CONSTRAINT monster_type_fkey FOREIGN KEY (monter_type_id) REFERENCES monster_types(id),
 	CONSTRAINT size_fkey FOREIGN KEY (size_id) REFERENCES sizes (id),
 	CONSTRAINT sense_fkey FOREIGN KEY (sense_id) REFERENCES senses(id),
-	CONSTRAINT spped_fkey FOREIGN KEY (speed_id) REFERENCES speeds(id)
-);
-
-CREATE TABLE monster_armors (
-	id bigint GENERATED ALWAYS AS IDENTITY,
-	armor_classe_id bigint NOT NULL,
-	monster_id bigint NOT NULL,
-	CONSTRAINT monster_armor_pkey PRIMARY KEY (id),
-	CONSTRAINT unique_monter_amrmor UNIQUE (armor_classe_id, monster_id),
-	CONSTRAINT armor_classe_fkey FOREIGN KEY (armor_classe_id) REFERENCES armor_classes(id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(id) ON DELETE CASCADE
+	CONSTRAINT speed_fkey FOREIGN KEY (speed_id) REFERENCES speeds(id),
+	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(id)
 );
 
 CREATE TABLE monster_vulnerabilities (
