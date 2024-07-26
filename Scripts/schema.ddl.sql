@@ -10,6 +10,8 @@ DROP TABLE IF EXISTS monster_imunities;
 DROP TABLE IF EXISTS monster_resistances;
 DROP TABLE IF EXISTS monster_vulnerabilities;
 DROP TABLE IF EXISTS monsters;
+DROP TABLE IF EXISTS alignments;
+DROP TABLE IF EXISTS languages;
 DROP TABLE IF EXISTS proficiency_bonus;
 DROP TABLE IF EXISTS proficiencies;
 DROP TABLE IF EXISTS sizes;
@@ -109,21 +111,21 @@ CREATE TABLE action_damage (
 	CONSTRAINT action_damage_pkey PRIMARY KEY (id),
 	CONSTRAINT action_fkey FOREIGN KEY (action_id) REFERENCES actions(id),
 	CONSTRAINT damage_fkey FOREIGN KEY (damage_id) REFERENCES damages(id),
-	CONSTRAINT unique_action_damage UNIQUE (action_id,damage_id)
+	CONSTRAINT action_damage_ukey UNIQUE (action_id,damage_id)
 );
 
 CREATE TABLE monster_types (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	type_name varchar(50) NOT NULL,
 	CONSTRAINT monter_type_pkey PRIMARY KEY (id),
-	CONSTRAINT unique_monster_types UNIQUE (type_name)
+	CONSTRAINT monster_types_ukey UNIQUE (type_name)
 );
 
 CREATE TABLE sizes (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	size_name varchar(50) NOT NULL,
 	CONSTRAINT sizes_pkey PRIMARY KEY (id),
-	CONSTRAINT unique_size UNIQUE (size_name)
+	CONSTRAINT size_ukey UNIQUE (size_name)
 );
 
 CREATE TABLE proficiencies (
@@ -132,7 +134,7 @@ CREATE TABLE proficiencies (
 	proficiency_type varchar(50) NOT NULL,
 	proficiency_attribute varchar(50) NOT NULL,
 	CONSTRAINT proficiencies_pkey PRIMARY KEY (id),
-	CONSTRAINT unique_proficiency UNIQUE (proficiency_name)
+	CONSTRAINT proficiency_ukey UNIQUE (proficiency_name)
 );
 
 CREATE TABLE proficiency_bonus (
@@ -141,13 +143,27 @@ CREATE TABLE proficiency_bonus (
 	proficiency_id bigint NOT NULL,
 	CONSTRAINT proficiency_bonus_pkey PRIMARY KEY (id),
 	CONSTRAINT proficiency_fkey FOREIGN KEY (proficiency_id) REFERENCES proficiencies(id),
-	CONSTRAINT unique_proficiency_bonus UNIQUE (bonus_value,proficiency_id)
+	CONSTRAINT proficiency_bonus_ukey UNIQUE (bonus_value,proficiency_id)
+);
+
+CREATE TABLE alignments (
+	id bigint GENERATED ALWAYS AS IDENTITY,
+	alignments_name varchar(50) NOT NULL,
+	CONSTRAINT alignments_pkey PRIMARY KEY (id),
+	CONSTRAINT alignment_ukey UNIQUE (alignments_name)
+);
+
+CREATE TABLE languages (
+	id bigint GENERATED ALWAYS AS IDENTITY,
+	languages_name varchar(50) NOT NULL,
+	CONSTRAINT langages_pkey PRIMARY KEY (id),
+	CONSTRAINT languages_ukey UNIQUE (languages_name)
 );
 
 CREATE TABLE monsters (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	monster_name varchar(100) NOT NULL,
-	alignment varchar(50) NOT NULL,
+	alignment_id bigint NOT NULL,
 	hit_points SMALLINT NOT NULL,
 	hit_dices varchar(30) NOT NULL,
 	hit_points_roll varchar(30) NOT NULL,
@@ -157,7 +173,7 @@ CREATE TABLE monsters (
 	inteligence SMALLINT NOT NULL,
 	wisdom SMALLINT NOT NULL,
 	charisma SMALLINT NOT NULL,
-	languages varchar(100) NOT NULL,
+	languages_id bigint NOT NULL,
 	challenge_rating SMALLINT NOT NULL,
 	xp integer NOT NULL,
 	image_url varchar(200),
@@ -174,7 +190,9 @@ CREATE TABLE monsters (
 	CONSTRAINT size_fkey FOREIGN KEY (size_id) REFERENCES sizes (id),
 	CONSTRAINT sense_fkey FOREIGN KEY (sense_id) REFERENCES senses(id),
 	CONSTRAINT speed_fkey FOREIGN KEY (speed_id) REFERENCES speeds(id),
-	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(id)
+	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(id),
+	CONSTRAINT alignment_fkey FOREIGN KEY (alignment_id) REFERENCES alignments(id),
+	CONSTRAINT langage_fkey FOREIGN KEY (languages_id) REFERENCES languages(id)
 );
 
 CREATE TABLE monster_vulnerabilities (
