@@ -56,8 +56,10 @@ CREATE TABLE senses (
 
 CREATE TABLE conditions (
 	id bigint GENERATED ALWAYS AS IDENTITY,
-	condition_name varchar(50) NOT NULL UNIQUE,
-	CONSTRAINT conditions_pkey PRIMARY KEY (id)
+	condition_name varchar(50) NOT NULL,
+	description varchar(1500),
+	CONSTRAINT conditions_pkey PRIMARY KEY (id),
+	CONSTRAINT condition_name_ukey UNIQUE (condition_name)
 );
 
 CREATE TABLE usages (
@@ -79,9 +81,10 @@ CREATE TABLE dc (
 
 CREATE TABLE damage_types (
 	id bigint GENERATED ALWAYS AS IDENTITY,
-	damage_type_name varchar(50) UNIQUE,
-	description varchar(150),
-	CONSTRAINT damage_type_pkey PRIMARY KEY (id)
+	damage_type_name varchar(50),
+	description varchar(255),
+	CONSTRAINT damage_type_pkey PRIMARY KEY (id),
+	CONSTRAINT damage_type_ukey UNIQUE (damage_type_name)
 );
 
 CREATE TABLE damages (
@@ -132,7 +135,7 @@ CREATE TABLE proficiencies (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	proficiency_name varchar(50) NOT NULL,
 	proficiency_type varchar(50) NOT NULL,
-	proficiency_attribute varchar(50) NOT NULL,
+	proficiency_attribute varchar(50) DEFAULT NULL,
 	CONSTRAINT proficiencies_pkey PRIMARY KEY (id),
 	CONSTRAINT proficiency_ukey UNIQUE (proficiency_name)
 );
@@ -149,6 +152,7 @@ CREATE TABLE proficiency_bonus (
 CREATE TABLE alignments (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	alignments_name varchar(50) NOT NULL,
+	description varchar(255),
 	CONSTRAINT alignments_pkey PRIMARY KEY (id),
 	CONSTRAINT alignment_ukey UNIQUE (alignments_name)
 );
