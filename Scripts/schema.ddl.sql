@@ -32,7 +32,6 @@ CREATE TABLE armor_classes (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	armor_type varchar(50) NOT NULL,
 	armor_value SMALLINT NOT NULL,
-	
 	CONSTRAINT armor_classes_pkey PRIMARY KEY (id),
 	CONSTRAINT armor_ukey UNIQUE (armor_type,armor_value)
 );
