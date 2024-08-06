@@ -9,3 +9,9 @@ SELECT * FROM senses s ;
 SELECT * FROM speeds s ;
 SELECT * FROM armor_classes ac ;
 SELECT * FROM monsters m ;
+
+SELECT * FROM monsters m 
+LEFT JOIN alignments a ON m.alignment_id = a.alignment_id 
+INNER JOIN monster_types mt ON m.monster_type_id = mt.monster_type_id
+INNER JOIN sizes s ON s.size_id = m.size_id
+;
