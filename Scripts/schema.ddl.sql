@@ -185,14 +185,14 @@ CREATE TABLE monsters (
 	monster_type_id bigint NOT NULL,
 	size_id bigint NOT NULL,
 	sense_id bigint NOT NULL,
---	speed_id bigint NOT NULL,
+	speed_id bigint NOT NULL,
 --	armor_id bigint NOT NULL,
 	CONSTRAINT monter_pkey PRIMARY KEY (monster_id),
 	CONSTRAINT monster_ukey UNIQUE (monster_name),
 	CONSTRAINT monster_type_fkey FOREIGN KEY (monster_type_id) REFERENCES monster_types(monster_type_id),
 	CONSTRAINT size_fkey FOREIGN KEY (size_id) REFERENCES sizes(size_id),
 	CONSTRAINT sense_fkey FOREIGN KEY (sense_id) REFERENCES senses(sense_id),
---	CONSTRAINT speed_fkey FOREIGN KEY (speed_id) REFERENCES speeds(speed_id),
+	CONSTRAINT speed_fkey FOREIGN KEY (speed_id) REFERENCES speeds(speed_id),
 --	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(armor_classe_id),
 	CONSTRAINT alignment_fkey FOREIGN KEY (alignment_id) REFERENCES alignments(alignment_id)
 --	CONSTRAINT langage_fkey FOREIGN KEY (languages_id) REFERENCES languages(language_id)
