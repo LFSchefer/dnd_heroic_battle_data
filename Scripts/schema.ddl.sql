@@ -1,3 +1,4 @@
+DROP VIEW IF EXISTS monsters_stats;
 DROP TABLE IF EXISTS battle_conditions;
 DROP TABLE IF EXISTS battle_monsters;
 DROP TABLE IF EXISTS battles;
@@ -307,7 +308,7 @@ CREATE TABLE battle_conditions (
 	CONSTRAINT condition_id_fkey FOREIGN KEY (condition_id) REFERENCES conditions(condition_id)
 );
 
-CREATE OR REPLACE VIEW monsters_stats AS
+CREATE VIEW monsters_stats AS
 	SELECT  m.monster_id, m.monster_name, m.hit_points, m.hit_dices, m.hit_points_roll, m.strength,
 	m.dexterity, m.constitution, m.intelligence, m.wisdom, m.charisma, m.challenge_rating, m.xp,
 	m.image_url, m.dnd5_native, a.alignment_id, a.alignments_name, a.description, s.size_id, 
