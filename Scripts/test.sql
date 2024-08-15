@@ -20,3 +20,6 @@ INNER JOIN armor_classes ac ON ac.armor_classe_id = m.armor_id
 ;
 
 SELECT * FROM monsters_stats;
+
+SELECT * FROM campaigns c;
+SELECT * FROM battles b ;
