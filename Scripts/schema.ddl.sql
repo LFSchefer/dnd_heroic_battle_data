@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS monster_condition_immunities;
 DROP TABLE IF EXISTS monster_imunities;
 DROP TABLE IF EXISTS monster_resistances;
 DROP TABLE IF EXISTS monster_vulnerabilities;
+DROP TABLE IF EXISTS monster_languages;
 DROP TABLE IF EXISTS monsters;
 DROP TABLE IF EXISTS alignments;
 DROP TABLE IF EXISTS languages;
@@ -177,7 +178,6 @@ CREATE TABLE monsters (
 	intelligence SMALLINT NOT NULL,
 	wisdom SMALLINT NOT NULL,
 	charisma SMALLINT NOT NULL,
---	languages_id bigint,
 	challenge_rating NUMERIC(5,2) NOT NULL,
 	xp integer NOT NULL,
 	image_url varchar(200),
@@ -195,7 +195,16 @@ CREATE TABLE monsters (
 	CONSTRAINT speed_fkey FOREIGN KEY (speed_id) REFERENCES speeds(speed_id),
 	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(armor_classe_id),
 	CONSTRAINT alignment_fkey FOREIGN KEY (alignment_id) REFERENCES alignments(alignment_id)
---	CONSTRAINT langage_fkey FOREIGN KEY (languages_id) REFERENCES languages(language_id)
+);
+
+CREATE TABLE monster_languages (
+	monster_language_id bigint GENERATED ALWAYS AS IDENTITY,
+	monster_id bigint NOT NULL,
+	language_id bigint NOT NULL,
+	CONSTRAINT monster_languages_pkey PRIMARY KEY (monster_language_id),
+	CONSTRAINT monster_languages_ukey UNIQUE (monster_id, language_id),
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id),
+	CONSTRAINT language_fkey FOREIGN KEY (language_id) REFERENCES languages(language_id)
 );
 
 CREATE TABLE monster_vulnerabilities (
