@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS battle_monsters;
 DROP TABLE IF EXISTS battles;
 DROP TABLE IF EXISTS campaigns;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS special_abilities;
 DROP TABLE IF EXISTS monster_actions;
 DROP TABLE IF EXISTS monster_proficiencies_bonus;
 DROP TABLE IF EXISTS monster_condition_immunities;
@@ -26,7 +27,7 @@ DROP TABLE IF EXISTS armor_classes;
 DROP TABLE IF EXISTS senses;
 DROP TABLE IF EXISTS conditions;
 DROP TABLE IF EXISTS usages;
-DROP TABLE IF EXISTS dc;
+DROP TABLE IF EXISTS dcs;
 DROP TABLE IF EXISTS damage_types;
 
 
@@ -66,12 +67,12 @@ CREATE TABLE conditions (
 CREATE TABLE usages (
 	usage_id bigint GENERATED ALWAYS AS IDENTITY,
 	usage_type varchar(20) NOT NULL,
-	times SMALLINT NOT NULL,
+	times SMALLINT,
 	CONSTRAINT usage_ukey UNIQUE (usage_type,times),
 	CONSTRAINT usages_pkey PRIMARY KEY (usage_id)
 );
 
-CREATE TABLE dc (
+CREATE TABLE dcs (
 	dc_id bigint GENERATED ALWAYS AS IDENTITY,
 	dc_type varchar(20) NOT NULL,
 	dc_value SMALLINT NOT NULL,
@@ -102,10 +103,10 @@ CREATE TABLE actions (
 	description varchar(150),
 	usage_id bigint,
 	attack_bonus SMALLINT NOT NULL DEFAULT 0,
-	dc_id bigint NOT NULL,
+	dc_id bigint,
 	CONSTRAINT actions_pkey PRIMARY KEY (action_id),
 	CONSTRAINT usage_fkey FOREIGN KEY (usage_id) REFERENCES usages(usage_id),
-	CONSTRAINT dc_fkey FOREIGN KEY (dc_id) REFERENCES dc(dc_id)
+	CONSTRAINT dc_fkey FOREIGN KEY (dc_id) REFERENCES dcs(dc_id)
 );
 
 CREATE TABLE action_damage (
@@ -163,6 +164,14 @@ CREATE TABLE languages (
 	languages_name varchar(50) NOT NULL,
 	CONSTRAINT langages_pkey PRIMARY KEY (language_id),
 	CONSTRAINT languages_ukey UNIQUE (languages_name)
+);
+
+CREATE TABLE special_abilities (
+	special_ability_id bigint GENERATED ALWAYS AS IDENTITY,
+	special_ability_name varchar(50) NOT NULL,
+	special_ability_description varchar(1500) NOT NULL,
+	CONSTRAINT special_ability_pkey PRIMARY KEY (special_ability_id),
+	CONSTRAINT special_ability_ukey UNIQUE (special_ability_name, special_ability_description)
 );
 
 CREATE TABLE monsters (
