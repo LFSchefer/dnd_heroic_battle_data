@@ -12,7 +12,7 @@ SELECT * FROM monsters m;
 SELECT * FROM usages u;
 SELECT * FROM dcs d;
 SELECT * FROM special_abilities sa;
-
+SELECT * FROM damages d ;
 
 SELECT * FROM monsters m 
 LEFT JOIN alignments a ON m.alignment_id = a.alignment_id 
@@ -27,3 +27,6 @@ SELECT * FROM monsters_stats;
 
 SELECT * FROM campaigns c;
 SELECT * FROM battles b ;
+
+SELECT d.damage_id, d.damage_dices, dt.damage_type_name, dt.description FROM damages d
+INNER JOIN damage_types dt ON dt.damage_type_id = d.damage_type_id ;
