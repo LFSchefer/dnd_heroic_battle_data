@@ -301,6 +301,7 @@ CREATE TABLE battles (
 	battle_id bigint GENERATED ALWAYS AS IDENTITY,
 	battle_name varchar(200) NOT NULL,
 	campaign_id bigint NOT NULL,
+	turn SMALLINT NOT NULL DEFAULT 0,
 	CONSTRAINT battle_pkey PRIMARY KEY (battle_id),
 	CONSTRAINT battle_ukey UNIQUE (battle_name, campaign_id),
 	CONSTRAINT campaing_fkey FOREIGN KEY (campaign_id) REFERENCES campaigns(campaign_id) ON DELETE CASCADE
