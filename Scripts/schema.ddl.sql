@@ -280,7 +280,7 @@ CREATE TABLE users (
 	user_id bigint GENERATED ALWAYS AS IDENTITY,
 	user_name varchar(50) NOT NULL,
 	email varchar(100) NOT NULL,
-	user_password varchar(100) NOT NULL,
+	user_password varchar(255) NOT NULL,
 	CONSTRAINT user_pkey PRIMARY KEY (user_id),
 	CONSTRAINT user_ukey UNIQUE (user_name),
 	CONSTRAINT unique_email UNIQUE (email)
@@ -289,12 +289,12 @@ CREATE TABLE users (
 CREATE TABLE campaigns (
 	campaign_id bigint GENERATED ALWAYS AS IDENTITY,
 	campaign_name varchar(200) NOT NULL,
---	user_id bigint NOT NULL,
+	user_id bigint NOT NULL,
 	creation_date timestamp DEFAULT current_timestamp,
 	CONSTRAINT campaigns_pkey PRIMARY KEY (campaign_id),
-	CONSTRAINT campaign_ukey UNIQUE (campaign_name)
---	CONSTRAINT unique_campaign UNIQUE (campaign_name, user_id)
---	CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+	CONSTRAINT campaign_ukey UNIQUE (campaign_name),
+	CONSTRAINT unique_campaign UNIQUE (campaign_name, user_id),
+	CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE battles (
