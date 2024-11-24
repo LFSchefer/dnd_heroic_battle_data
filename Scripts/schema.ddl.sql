@@ -283,7 +283,7 @@ CREATE TABLE users (
 	user_password varchar(255) NOT NULL,
 	CONSTRAINT user_pkey PRIMARY KEY (user_id),
 	CONSTRAINT user_ukey UNIQUE (user_name),
-	CONSTRAINT unique_email UNIQUE (email)
+	CONSTRAINT email_ukey UNIQUE (email)
 );
 
 CREATE TABLE campaigns (
