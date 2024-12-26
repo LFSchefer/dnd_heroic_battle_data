@@ -110,13 +110,11 @@ CREATE TABLE actions (
 );
 
 CREATE TABLE action_damage (
-	action_damage_id bigint GENERATED ALWAYS AS IDENTITY,
 	action_id bigint NOT NULL,
 	damage_id bigint NOT NULL,
-	CONSTRAINT action_damage_pkey PRIMARY KEY (action_damage_id),
+	CONSTRAINT action_damage_pkey PRIMARY KEY (action_id,damage_id),
 	CONSTRAINT action_fkey FOREIGN KEY (action_id) REFERENCES actions(action_id),
-	CONSTRAINT damage_fkey FOREIGN KEY (damage_id) REFERENCES damages(damage_id),
-	CONSTRAINT action_damage_ukey UNIQUE (action_id,damage_id)
+	CONSTRAINT damage_fkey FOREIGN KEY (damage_id) REFERENCES damages(damage_id)
 );
 
 CREATE TABLE monster_types (
@@ -207,71 +205,58 @@ CREATE TABLE monsters (
 );
 
 CREATE TABLE monster_languages (
-	monster_language_id bigint GENERATED ALWAYS AS IDENTITY,
 	monster_id bigint NOT NULL,
 	language_id bigint NOT NULL,
-	CONSTRAINT monster_languages_pkey PRIMARY KEY (monster_language_id),
+	CONSTRAINT monster_languages_pkey PRIMARY KEY (monster_id,language_id),
 	CONSTRAINT monster_languages_ukey UNIQUE (monster_id, language_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id),
 	CONSTRAINT language_fkey FOREIGN KEY (language_id) REFERENCES languages(language_id)
 );
 
 CREATE TABLE monster_vulnerabilities (
-	monster_vulnerability_id bigint GENERATED ALWAYS AS IDENTITY,
 	vulnerability_id bigint NOT NULL,
 	monster_id bigint NOT NULL,
-	CONSTRAINT monster_vulnerability_pkey PRIMARY KEY (monster_vulnerability_id),
-	CONSTRAINT monster_vulnerability_ukey UNIQUE (vulnerability_id, monster_id),
+	CONSTRAINT monster_vulnerability_pkey PRIMARY KEY (vulnerability_id,monster_id),
 	CONSTRAINT vulnerability_fkey FOREIGN KEY (vulnerability_id) REFERENCES damage_types(damage_type_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_resistances (
-	monster_resistance_id bigint GENERATED ALWAYS AS IDENTITY,
 	resistance_id bigint NOT NULL,
 	monster_id bigint NOT NULL,
-	CONSTRAINT monster_resistances_pkey PRIMARY KEY (monster_resistance_id),
-	CONSTRAINT monster_resistances_ukey UNIQUE (resistance_id, monster_id),
+	CONSTRAINT monster_resistances_pkey PRIMARY KEY (resistance_id,monster_id),
 	CONSTRAINT resistance_fkey FOREIGN KEY (resistance_id) REFERENCES damage_types(damage_type_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_imunities (
-	monster_imunitie_id bigint GENERATED ALWAYS AS IDENTITY,
 	imunity_id bigint NOT NULL,
 	monster_id bigint NOT NULL,
-	CONSTRAINT monster_imunity_pkey PRIMARY KEY (monster_imunitie_id),
-	CONSTRAINT monster_imunity_ukey UNIQUE (imunity_id, monster_id),
+	CONSTRAINT monster_imunity_pkey PRIMARY KEY (imunity_id,monster_id),
 	CONSTRAINT imunity_fkey FOREIGN KEY (imunity_id) REFERENCES damage_types(damage_type_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE 
 );
 
 CREATE TABLE monster_condition_immunities (
-	monster_condition_immunity_id bigint GENERATED ALWAYS AS IDENTITY,
 	condition_id bigint NOT NULL,
 	monster_id bigint NOT NULL,
-	CONSTRAINT monster_condition_immunities_pkey PRIMARY KEY (monster_condition_immunity_id),
-	CONSTRAINT monster_condition_imunity_ukey UNIQUE (condition_id, monster_id),
+	CONSTRAINT monster_condition_immunities_pkey PRIMARY KEY (condition_id,monster_id),
 	CONSTRAINT condition_imunity_fkey FOREIGN KEY (condition_id) REFERENCES conditions(condition_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_proficiencies_bonus (
-	monster_proficiency_bonus_id bigint GENERATED ALWAYS AS IDENTITY,
 	proficiency_bonus_id bigint NOT NULL,
 	monster_id bigint NOT NULL,
-	CONSTRAINT monster_proficiencies_bonus_pkey PRIMARY KEY (monster_proficiency_bonus_id),
-	CONSTRAINT monster_proficiencies_bonus_ukey UNIQUE (proficiency_bonus_id, monster_id),
+	CONSTRAINT monster_proficiencies_bonus_pkey PRIMARY KEY (proficiency_bonus_id,monster_id),
 	CONSTRAINT proficiency_bonus_fkey FOREIGN KEY (proficiency_bonus_id) REFERENCES proficiency_bonus(proficiency_bonus_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_actions (
-	monster_action_id bigint GENERATED ALWAYS AS IDENTITY,
 	action_id bigint NOT NULL,
 	monster_id bigint NOT NULL,
-	CONSTRAINT monster_actions_pkey PRIMARY KEY (monster_action_id),
-	CONSTRAINT monster_action_ukey UNIQUE (action_id, monster_id),
+	CONSTRAINT monster_actions_pkey PRIMARY KEY (action_id,monster_id),
 	CONSTRAINT action_fkey FOREIGN KEY (action_id) REFERENCES actions(action_id),
 	CONSTRAINT monst_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
 );
@@ -319,10 +304,9 @@ CREATE TABLE battle_monsters (
 );
 
 CREATE TABLE battle_conditions (
-	battle_condition_id bigint GENERATED ALWAYS AS IDENTITY,
 	battle_monster_id bigint NOT NULL,
 	condition_id bigint NOT NULL,
-	CONSTRAINT battle_conditions_pkey PRIMARY KEY (battle_condition_id),
+	CONSTRAINT battle_conditions_pkey PRIMARY KEY (battle_monster_id,condition_id),
 	CONSTRAINT battle_monster_fkey FOREIGN KEY (battle_monster_id) REFERENCES battle_monsters(battle_monster_id) ON DELETE CASCADE,
 	CONSTRAINT condition_id_fkey FOREIGN KEY (condition_id) REFERENCES conditions(condition_id)
 );
