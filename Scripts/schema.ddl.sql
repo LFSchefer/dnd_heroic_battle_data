@@ -296,6 +296,7 @@ CREATE TABLE battle_monsters (
 	battle_monster_id bigint GENERATED ALWAYS AS IDENTITY,
 	current_hit_points SMALLINT NOT NULL,
 	battle_monster_name varchar(100) NOT NULL,
+	initiative SMALLINT DEFAULT NULL,
 	monster_id bigint NOT NULL,
 	battle_id bigint NOT NULL,
 	CONSTRAINT battle_monster_pkey PRIMARY KEY (battle_monster_id),
