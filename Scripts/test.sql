@@ -19,6 +19,7 @@ SELECT * FROM monster_resistances mr;
 SELECT * FROM monster_vulnerabilities mv;
 SELECT * FROM monster_condition_immunities mci;
 SELECT * FROM monsters_stats;
+SELECT * FROM damage_types dt ;
 
 SELECT d.damage_id, d.damage_dices, dt.damage_type_name, dt.description FROM damages d
 INNER JOIN damage_types dt ON dt.damage_type_id = d.damage_type_id;
