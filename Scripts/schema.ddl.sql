@@ -1,6 +1,6 @@
 DROP VIEW IF EXISTS monsters_stats;
 DROP TABLE IF EXISTS battle_conditions;
-DROP TABLE IF EXISTS battle_monsters;
+DROP TABLE IF EXISTS monsters;
 DROP TABLE IF EXISTS battles;
 DROP TABLE IF EXISTS campaigns;
 DROP TABLE IF EXISTS users;
@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS monster_imunities;
 DROP TABLE IF EXISTS monster_resistances;
 DROP TABLE IF EXISTS monster_vulnerabilities;
 DROP TABLE IF EXISTS monster_languages;
-DROP TABLE IF EXISTS monsters;
+DROP TABLE IF EXISTS monster_models;
 DROP TABLE IF EXISTS alignments;
 DROP TABLE IF EXISTS languages;
 DROP TABLE IF EXISTS proficiency_bonus;
@@ -22,9 +22,7 @@ DROP TABLE IF EXISTS monster_types;
 DROP TABLE IF EXISTS action_damage;
 DROP TABLE IF EXISTS actions;
 DROP TABLE IF EXISTS damages;
-DROP TABLE IF EXISTS speeds;
 DROP TABLE IF EXISTS armor_classes;
-DROP TABLE IF EXISTS senses;
 DROP TABLE IF EXISTS conditions;
 DROP TABLE IF EXISTS usages;
 DROP TABLE IF EXISTS dcs;
@@ -37,23 +35,6 @@ CREATE TABLE armor_classes (
 	armor_value SMALLINT NOT NULL,
 	CONSTRAINT armor_classes_pkey PRIMARY KEY (armor_classe_id),
 	CONSTRAINT armor_ukey UNIQUE (armor_type,armor_value)
-);
-
-CREATE TABLE speeds (
-	speed_id bigint GENERATED ALWAYS AS IDENTITY,
-	walk SMALLINT,
-	swim SMALLINT,
-	fly SMALLINT,
-	CONSTRAINT speed_pkey PRIMARY KEY (speed_id),
-	CONSTRAINT speed_ukey UNIQUE (walk,swim,fly)
-);
-
-CREATE TABLE senses (
-	sense_id bigint GENERATED ALWAYS AS IDENTITY,
-	darkvision SMALLINT,
-	passive_perception SMALLINT NOT NULL,
-	CONSTRAINT sense_pkey PRIMARY KEY (sense_id),
-	CONSTRAINT sense_ukey UNIQUE (darkvision, passive_perception) 
 );
 
 CREATE TABLE conditions (
@@ -172,12 +153,11 @@ CREATE TABLE special_abilities (
 	CONSTRAINT special_ability_ukey UNIQUE (special_ability_name, special_ability_description)
 );
 
-CREATE TABLE monsters (
-	monster_id bigint GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE monster_models (
+	model_id bigint GENERATED ALWAYS AS IDENTITY,
 	monster_name varchar(100) NOT NULL,
 	alignment_id bigint,
 	hit_points SMALLINT NOT NULL,
-	hit_dices varchar(30) NOT NULL,
 	hit_points_roll varchar(30) NOT NULL,
 	strength SMALLINT NOT NULL,
 	dexterity SMALLINT NOT NULL,
@@ -189,17 +169,18 @@ CREATE TABLE monsters (
 	xp integer NOT NULL,
 	image_url varchar(200),
 	dnd5_native boolean NOT NULL DEFAULT FALSE,
+	passive_perception SMALLINT NOT NULL,
+	darkvision SMALLINT,
+	walk SMALLINT,
+	swim SMALLINT,
+	fly SMALLINT,
 	monster_type_id bigint NOT NULL,
 	size_id bigint NOT NULL,
-	sense_id bigint NOT NULL,
-	speed_id bigint NOT NULL,
 	armor_id bigint NOT NULL,
-	CONSTRAINT monter_pkey PRIMARY KEY (monster_id),
+	CONSTRAINT monter_pkey PRIMARY KEY (model_id),
 	CONSTRAINT monster_ukey UNIQUE (monster_name),
 	CONSTRAINT monster_type_fkey FOREIGN KEY (monster_type_id) REFERENCES monster_types(monster_type_id),
 	CONSTRAINT size_fkey FOREIGN KEY (size_id) REFERENCES sizes(size_id),
-	CONSTRAINT sense_fkey FOREIGN KEY (sense_id) REFERENCES senses(sense_id),
-	CONSTRAINT speed_fkey FOREIGN KEY (speed_id) REFERENCES speeds(speed_id),
 	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(armor_classe_id),
 	CONSTRAINT alignment_fkey FOREIGN KEY (alignment_id) REFERENCES alignments(alignment_id)
 );
@@ -209,7 +190,7 @@ CREATE TABLE monster_languages (
 	language_id bigint NOT NULL,
 	CONSTRAINT monster_languages_pkey PRIMARY KEY (monster_id,language_id),
 	CONSTRAINT monster_languages_ukey UNIQUE (monster_id, language_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id),
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id),
 	CONSTRAINT language_fkey FOREIGN KEY (language_id) REFERENCES languages(language_id)
 );
 
@@ -218,7 +199,7 @@ CREATE TABLE monster_vulnerabilities (
 	monster_id bigint NOT NULL,
 	CONSTRAINT monster_vulnerability_pkey PRIMARY KEY (vulnerability_id,monster_id),
 	CONSTRAINT vulnerability_fkey FOREIGN KEY (vulnerability_id) REFERENCES damage_types(damage_type_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_resistances (
@@ -226,7 +207,7 @@ CREATE TABLE monster_resistances (
 	monster_id bigint NOT NULL,
 	CONSTRAINT monster_resistances_pkey PRIMARY KEY (resistance_id,monster_id),
 	CONSTRAINT resistance_fkey FOREIGN KEY (resistance_id) REFERENCES damage_types(damage_type_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_imunities (
@@ -234,7 +215,7 @@ CREATE TABLE monster_imunities (
 	monster_id bigint NOT NULL,
 	CONSTRAINT monster_imunity_pkey PRIMARY KEY (imunity_id,monster_id),
 	CONSTRAINT imunity_fkey FOREIGN KEY (imunity_id) REFERENCES damage_types(damage_type_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE 
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE 
 );
 
 CREATE TABLE monster_condition_immunities (
@@ -242,7 +223,7 @@ CREATE TABLE monster_condition_immunities (
 	monster_id bigint NOT NULL,
 	CONSTRAINT monster_condition_immunities_pkey PRIMARY KEY (condition_id,monster_id),
 	CONSTRAINT condition_imunity_fkey FOREIGN KEY (condition_id) REFERENCES conditions(condition_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_proficiencies_bonus (
@@ -250,7 +231,7 @@ CREATE TABLE monster_proficiencies_bonus (
 	monster_id bigint NOT NULL,
 	CONSTRAINT monster_proficiencies_bonus_pkey PRIMARY KEY (proficiency_bonus_id,monster_id),
 	CONSTRAINT proficiency_bonus_fkey FOREIGN KEY (proficiency_bonus_id) REFERENCES proficiency_bonus(proficiency_bonus_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_actions (
@@ -258,7 +239,7 @@ CREATE TABLE monster_actions (
 	monster_id bigint NOT NULL,
 	CONSTRAINT monster_actions_pkey PRIMARY KEY (action_id,monster_id),
 	CONSTRAINT action_fkey FOREIGN KEY (action_id) REFERENCES actions(action_id),
-	CONSTRAINT monst_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE
+	CONSTRAINT monst_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE users (
@@ -292,37 +273,34 @@ CREATE TABLE battles (
 	CONSTRAINT campaing_fkey FOREIGN KEY (campaign_id) REFERENCES campaigns(campaign_id) ON DELETE CASCADE
 );
 
-CREATE TABLE battle_monsters (
-	battle_monster_id bigint GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE monsters (
+	id bigint GENERATED ALWAYS AS IDENTITY,
 	current_hit_points SMALLINT NOT NULL,
-	battle_monster_name varchar(100) NOT NULL,
+	monster_name varchar(100) NOT NULL,
 	initiative SMALLINT DEFAULT NULL,
 	monster_id bigint NOT NULL,
 	battle_id bigint NOT NULL,
-	CONSTRAINT battle_monster_pkey PRIMARY KEY (battle_monster_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id),
+	CONSTRAINT battle_monster_pkey PRIMARY KEY (id),
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id),
 	CONSTRAINT battle_fkey FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE
 );
 
 CREATE TABLE battle_conditions (
-	battle_monster_id bigint NOT NULL,
+	monster_id bigint NOT NULL,
 	condition_id bigint NOT NULL,
-	CONSTRAINT battle_conditions_pkey PRIMARY KEY (battle_monster_id,condition_id),
-	CONSTRAINT battle_monster_fkey FOREIGN KEY (battle_monster_id) REFERENCES battle_monsters(battle_monster_id) ON DELETE CASCADE,
+	CONSTRAINT battle_conditions_pkey PRIMARY KEY (monster_id,condition_id),
+	CONSTRAINT battle_monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(id) ON DELETE CASCADE,
 	CONSTRAINT condition_id_fkey FOREIGN KEY (condition_id) REFERENCES conditions(condition_id)
 );
 
 CREATE VIEW monsters_stats AS
-	SELECT  m.monster_id, m.monster_name, m.hit_points, m.hit_dices, m.hit_points_roll, m.strength,
+	SELECT  m.model_id, m.monster_name, m.hit_points, m.hit_points_roll, m.strength,
 	m.dexterity, m.constitution, m.intelligence, m.wisdom, m.charisma, m.challenge_rating, m.xp,
 	m.image_url, m.dnd5_native, a.alignment_id, a.alignments_name, a.description, s.size_id, 
-	s.size_name, s2.sense_id, s2.darkvision, s2.passive_perception, s3.speed_id, s3.walk, 
-	s3.swim, s3.fly, ac.armor_classe_id, ac.armor_type, ac.armor_value 
-	FROM monsters m 
+	s.size_name, ac.armor_classe_id, ac.armor_type, ac.armor_value 
+	FROM monster_models m 
 	LEFT JOIN alignments a ON m.alignment_id = a.alignment_id 
 	INNER JOIN monster_types mt ON m.monster_type_id = mt.monster_type_id
 	INNER JOIN sizes s ON s.size_id = m.size_id
-	INNER JOIN senses s2 ON s2.sense_id = m.sense_id
-	INNER JOIN speeds s3 ON s3.speed_id = m.speed_id
 	INNER JOIN armor_classes ac ON ac.armor_classe_id = m.armor_id
 ;
