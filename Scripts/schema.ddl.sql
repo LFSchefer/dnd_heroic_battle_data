@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS monsters;
 DROP TABLE IF EXISTS battles;
 DROP TABLE IF EXISTS campaigns;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS special_abilities;
 DROP TABLE IF EXISTS monster_actions;
 DROP TABLE IF EXISTS monster_proficiencies_bonus;
 DROP TABLE IF EXISTS monster_condition_immunities;
@@ -12,6 +11,7 @@ DROP TABLE IF EXISTS monster_imunities;
 DROP TABLE IF EXISTS monster_resistances;
 DROP TABLE IF EXISTS monster_vulnerabilities;
 DROP TABLE IF EXISTS monster_languages;
+DROP TABLE IF EXISTS monster_special_abilities;
 DROP TABLE IF EXISTS monster_models;
 DROP TABLE IF EXISTS alignments;
 DROP TABLE IF EXISTS languages;
@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS conditions;
 DROP TABLE IF EXISTS usages;
 DROP TABLE IF EXISTS dcs;
 DROP TABLE IF EXISTS damage_types;
+DROP TABLE IF EXISTS special_abilities;
 
 
 CREATE TABLE armor_classes (
@@ -192,6 +193,14 @@ CREATE TABLE monster_languages (
 	CONSTRAINT monster_languages_ukey UNIQUE (monster_id, language_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id),
 	CONSTRAINT language_fkey FOREIGN KEY (language_id) REFERENCES languages(language_id)
+);
+
+CREATE TABLE monster_special_abilities (
+	monster_id bigint NOT NULL,
+	special_ability_id bigint NOT NULL,
+	CONSTRAINT monster_special_ability_pkey PRIMARY KEY (monster_id,special_ability_id),
+	CONSTRAINT special_ability_fkey FOREIGN KEY (special_ability_id) REFERENCES special_abilities(special_ability_id),
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_vulnerabilities (

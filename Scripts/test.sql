@@ -16,6 +16,7 @@ SELECT * FROM monster_imunities mi;
 SELECT * FROM monster_resistances mr;
 SELECT * FROM monster_vulnerabilities mv;
 SELECT * FROM monster_condition_immunities mci;
+SELECT * FROM monster_special_abilities;
 SELECT * FROM monsters_stats;
 SELECT * FROM damage_types dt;
 
@@ -26,3 +27,4 @@ SELECT * FROM users u ;
 SELECT * FROM campaigns c;
 SELECT * FROM battles b ;
 SELECT * FROM monsters m;
+
