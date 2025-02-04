@@ -285,6 +285,7 @@ CREATE TABLE battles (
 CREATE TABLE monsters (
 	id bigint GENERATED ALWAYS AS IDENTITY,
 	current_hit_points SMALLINT NOT NULL,
+	max_hit_points SMALLINT NOT NULL,
 	monster_name varchar(100) NOT NULL,
 	initiative SMALLINT DEFAULT NULL,
 	monster_id bigint NOT NULL,
