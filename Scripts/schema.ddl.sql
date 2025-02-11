@@ -190,9 +190,8 @@ CREATE TABLE monster_languages (
 	monster_id bigint NOT NULL,
 	language_id bigint NOT NULL,
 	CONSTRAINT monster_languages_pkey PRIMARY KEY (monster_id,language_id),
-	CONSTRAINT monster_languages_ukey UNIQUE (monster_id, language_id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id),
-	CONSTRAINT language_fkey FOREIGN KEY (language_id) REFERENCES languages(language_id)
+	CONSTRAINT language_fkey FOREIGN KEY (language_id) REFERENCES languages(language_id),
+	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id) ON DELETE CASCADE
 );
 
 CREATE TABLE monster_special_abilities (
@@ -283,15 +282,15 @@ CREATE TABLE battles (
 );
 
 CREATE TABLE monsters (
-	id bigint GENERATED ALWAYS AS IDENTITY,
+	monster_id bigint GENERATED ALWAYS AS IDENTITY,
 	current_hit_points SMALLINT NOT NULL,
 	max_hit_points SMALLINT NOT NULL,
 	monster_name varchar(100) NOT NULL,
 	initiative SMALLINT DEFAULT NULL,
-	monster_id bigint NOT NULL,
+	model_id bigint NOT NULL,
 	battle_id bigint NOT NULL,
-	CONSTRAINT battle_monster_pkey PRIMARY KEY (id),
-	CONSTRAINT monster_fkey FOREIGN KEY (monster_id) REFERENCES monster_models(model_id),
+	CONSTRAINT battle_monster_pkey PRIMARY KEY (monster_id),
+	CONSTRAINT monster_fkey FOREIGN KEY (model_id) REFERENCES monster_models(model_id),
 	CONSTRAINT battle_fkey FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE
 );
 
@@ -299,7 +298,7 @@ CREATE TABLE battle_conditions (
 	monster_id bigint NOT NULL,
 	condition_id bigint NOT NULL,
 	CONSTRAINT battle_conditions_pkey PRIMARY KEY (monster_id,condition_id),
-	CONSTRAINT battle_monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(id) ON DELETE CASCADE,
+	CONSTRAINT battle_monster_fkey FOREIGN KEY (monster_id) REFERENCES monsters(monster_id) ON DELETE CASCADE,
 	CONSTRAINT condition_id_fkey FOREIGN KEY (condition_id) REFERENCES conditions(condition_id)
 );
 
