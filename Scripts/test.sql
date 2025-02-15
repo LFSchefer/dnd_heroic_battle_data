@@ -5,7 +5,7 @@ SELECT * FROM alignments a;
 SELECT * FROM proficiencies p;
 SELECT * FROM sizes s;
 SELECT * FROM monster_types mt;
-SELECT * FROM armor_classes ac;
+SELECT * FROM armor_types ac;
 SELECT * FROM monster_models mm;
 SELECT * FROM usages u;
 SELECT * FROM dcs d;
@@ -27,4 +27,5 @@ SELECT * FROM users u ;
 SELECT * FROM campaigns c;
 SELECT * FROM battles b ;
 SELECT * FROM monsters m;
+
 
