@@ -289,6 +289,7 @@ CREATE TABLE monsters (
 	initiative SMALLINT DEFAULT NULL,
 	model_id bigint NOT NULL,
 	battle_id bigint NOT NULL,
+	have_play_this_round boolean DEFAULT FALSE,
 	CONSTRAINT battle_monster_pkey PRIMARY KEY (monster_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (model_id) REFERENCES monster_models(model_id),
 	CONSTRAINT battle_fkey FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE

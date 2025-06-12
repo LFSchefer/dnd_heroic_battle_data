@@ -25,7 +25,5 @@ INNER JOIN damage_types dt ON dt.damage_type_id = d.damage_type_id;
 
 SELECT * FROM users u ;
 SELECT * FROM campaigns c;
-SELECT * FROM battles b ;
+SELECT * FROM battles b;
 SELECT * FROM monsters m;
-
-
