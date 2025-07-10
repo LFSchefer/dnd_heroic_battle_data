@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS monster_types;
 DROP TABLE IF EXISTS action_damage;
 DROP TABLE IF EXISTS actions;
 DROP TABLE IF EXISTS damages;
-DROP TABLE IF EXISTS armor_classes;
+DROP TABLE IF EXISTS armor_types;
 DROP TABLE IF EXISTS conditions;
 DROP TABLE IF EXISTS usages;
 DROP TABLE IF EXISTS dcs;
@@ -30,12 +30,11 @@ DROP TABLE IF EXISTS damage_types;
 DROP TABLE IF EXISTS special_abilities;
 
 
-CREATE TABLE armor_classes (
-	armor_classe_id bigint GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE armor_types (
+	armor_types_id bigint GENERATED ALWAYS AS IDENTITY,
 	armor_type varchar(50) NOT NULL,
-	armor_value SMALLINT NOT NULL,
-	CONSTRAINT armor_classes_pkey PRIMARY KEY (armor_classe_id),
-	CONSTRAINT armor_ukey UNIQUE (armor_type,armor_value)
+	CONSTRAINT armor_classes_pkey PRIMARY KEY (armor_types_id),
+	CONSTRAINT armor_ukey UNIQUE (armor_type)
 );
 
 CREATE TABLE conditions (
@@ -175,6 +174,7 @@ CREATE TABLE monster_models (
 	walk SMALLINT,
 	swim SMALLINT,
 	fly SMALLINT,
+	armor_class SMALLINT NOT NULL,
 	monster_type_id bigint NOT NULL,
 	size_id bigint NOT NULL,
 	armor_id bigint NOT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE monster_models (
 	CONSTRAINT monster_ukey UNIQUE (monster_name),
 	CONSTRAINT monster_type_fkey FOREIGN KEY (monster_type_id) REFERENCES monster_types(monster_type_id),
 	CONSTRAINT size_fkey FOREIGN KEY (size_id) REFERENCES sizes(size_id),
-	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_classes(armor_classe_id),
+	CONSTRAINT armor_fkey FOREIGN KEY (armor_id) REFERENCES armor_types(armor_types_id),
 	CONSTRAINT alignment_fkey FOREIGN KEY (alignment_id) REFERENCES alignments(alignment_id)
 );
 
@@ -289,6 +289,10 @@ CREATE TABLE monsters (
 	initiative SMALLINT DEFAULT NULL,
 	model_id bigint NOT NULL,
 	battle_id bigint NOT NULL,
+	have_play_this_round boolean DEFAULT FALSE,
+	ACTION boolean DEFAULT FALSE,
+	MOVE boolean DEFAULT FALSE,
+	bonus_action boolean DEFAULT FALSE,
 	CONSTRAINT battle_monster_pkey PRIMARY KEY (monster_id),
 	CONSTRAINT monster_fkey FOREIGN KEY (model_id) REFERENCES monster_models(model_id),
 	CONSTRAINT battle_fkey FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE
@@ -306,10 +310,10 @@ CREATE VIEW monsters_stats AS
 	SELECT  m.model_id, m.monster_name, m.hit_points, m.hit_points_roll, m.strength,
 	m.dexterity, m.constitution, m.intelligence, m.wisdom, m.charisma, m.challenge_rating, m.xp,
 	m.image_url, m.dnd5_native, a.alignment_id, a.alignments_name, a.description, s.size_id, 
-	s.size_name, ac.armor_classe_id, ac.armor_type, ac.armor_value 
+	s.size_name, ac.armor_types_id, ac.armor_type
 	FROM monster_models m 
 	LEFT JOIN alignments a ON m.alignment_id = a.alignment_id 
 	INNER JOIN monster_types mt ON m.monster_type_id = mt.monster_type_id
 	INNER JOIN sizes s ON s.size_id = m.size_id
-	INNER JOIN armor_classes ac ON ac.armor_classe_id = m.armor_id
+	INNER JOIN armor_types ac ON ac.armor_types_id = m.armor_id
 ;
