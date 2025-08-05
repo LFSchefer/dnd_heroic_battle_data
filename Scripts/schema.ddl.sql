@@ -289,6 +289,7 @@ CREATE TABLE monsters (
 	initiative SMALLINT DEFAULT NULL,
 	model_id bigint NOT NULL,
 	battle_id bigint NOT NULL,
+	his_turn boolean DEFAULT FALSE,
 	have_play_this_round boolean DEFAULT FALSE,
 	ACTION boolean DEFAULT FALSE,
 	MOVE boolean DEFAULT FALSE,
