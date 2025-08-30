@@ -29,4 +29,7 @@ SELECT * FROM battles b;
 SELECT * FROM monsters m;
 
 
-SELECT * FROM users u ;
+SELECT * FROM campaigns c ;
+
+SELECT * FROM battles b;
+
