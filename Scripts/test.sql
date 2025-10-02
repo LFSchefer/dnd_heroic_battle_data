@@ -33,3 +33,5 @@ SELECT * FROM campaigns c ;
 
 SELECT * FROM battles b;
 
+
+SELECT mm.monster_name , mm.image_url FROM monster_models mm;
